@@ -1,0 +1,25 @@
+<head>
+    <link rel="stylesheet" href="/stylesheets/report.css">
+</head>
+
+
+<div class="report-container">
+    <h1>Prijavi korisnika: <%= userToReport.username %></h1>
+    
+    <form action="/reports/<%= userToReport.id %>" method="POST">
+        <div class="form-group">
+            <label>Naslov prijave (npr. Neprikladno ponašanje)</label>
+            <input type="text" name="title" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>Detaljan opis</label>
+            <textarea name="content" required class="form-control" rows="5"></textarea>
+        </div>
+        
+        <div class="actions">
+            <button type="submit" class="button danger-button">Pošalji prijavu</button>
+            <a href="javascript:history.back()">Odustani</a>
+        </div>
+    </form>
+</div>

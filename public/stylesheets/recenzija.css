@@ -1,0 +1,356 @@
+.review-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+    background-color: #f4f7f6;
+}
+
+.review-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.review-card-header {
+    background: #3b82f6;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.review-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.center-content {
+    align-items: center; /* Centriranje zvijezda */
+}
+
+.main-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+    display: block;
+}
+
+/* FIX ZA ZVIJEZDE - Centrirano i uredno */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* Ovo je bitno za hover logiku */
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ddd;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    margin: 0 5px;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffc107; /* Zlatna boja */
+}
+
+.star-rating label:active {
+    transform: scale(0.9);
+}
+
+/* FIX ZA TEXTAREA - Puna širina */
+textarea#komentar {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+textarea#komentar:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-submit:hover {
+    background: #2563eb;
+}
+
+.btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* Kontejner stranice */
+.komentari-kontejner {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.naslov-stranice {
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.linija {
+    height: 4px;
+    width: 60px;
+    background: #6366f1;
+    margin-bottom: 30px;
+    border-radius: 2px;
+}
+
+/* Kartica komentara */
+.komentar-kartica {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s ease;
+}
+
+.komentar-kartica:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.komentar-zaglavlje {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ime-korisnika {
+    font-weight: bold;
+    color: #6366f1;
+}
+
+.datum-tekst {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Zvjezdice */
+.ocjena-zvjezdice {
+    color: #f1c40f;
+    margin-bottom: 12px;
+}
+
+.tekst-komentara {
+    color: #1e293b;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0 0 15px 0;
+}
+
+/* Sekcija za uređivanje */
+.uredi-sekcija {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.dugme-uredi {
+    text-decoration: none;
+    background-color: #fff8e1;
+    color: #d97706;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #fde68a;
+    transition: all 0.2s;
+}
+
+.dugme-uredi:hover {
+    background-color: #fde68a;
+    color: #92400e;
+}
+
+.tajmer-tekst {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* Donja navigacija */
+.donja-navigacija {
+    margin-top: 30px;
+}
+
+.link-povratak {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.link-povratak:hover {
+    text-decoration: underline;
+}
+
+.nema-podataka {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 8px;
+    color: #475569;
+    text-align: center;
+}
+
+.uredi-recenziju-kontejner {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.forma-kartica {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.forma-zaglavlje h2 {
+    color: #0f172a;
+    margin-bottom: 8px;
+    font-size: 22px;
+}
+
+.forma-zaglavlje p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-grupa {
+    margin-bottom: 25px;
+}
+
+.input-grupa label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1e293b;
+}
+
+/* Stil za Textarea */
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+}
+
+/* Logika za zvjezdice (Radio Button Hack) */
+.rating-izbor {
+    display: flex;
+    flex-direction: row-reverse; /* Ovo omogućava hover efekt s lijeva na desno */
+    justify-content: flex-end;
+    gap: 8px;
+    font-size: 32px;
+}
+
+.rating-izbor input {
+    display: none;
+}
+
+.rating-izbor label {
+    font-size: 28px;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-right: 5px;
+}
+
+.rating-izbor input:checked ~ label,
+.rating-izbor label:hover,
+.rating-izbor label:hover ~ label {
+    color: #fbbf24; /* Zlatna boja */
+}
+
+/* Dugmad */
+.akcije-forme {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.dugme-spasi {
+    flex: 2;
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dugme-spasi:hover {
+    background: #6366f1;
+    transform: scale(1.02);
+}
+
+.dugme-otkaži {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.dugme-otkaži:hover {
+    background: #e2e8f0;
+    transform: scale(1.02);
+}

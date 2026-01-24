@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/pretraga.css">  
+</head>
+<body>
+<div class="filter-main-wrapper">
+    <button type="button" class="filter-toggle-button" onclick="toggleFilterMenu()">
+        <span>Filteri i sortiranje</span>
+        <span class="arrow-icon" id="filterArrow"><%= (selectedZanr || selectedJezik || minCijena || maxCijena) ? '▲' : '▼' %></span>
+    </button>
+
+    <div id="filterMenu" class="filter-sidebar-container <%= (selectedZanr || selectedJezik || minCijena || maxCijena) ? 'active' : 'hidden' %>">
+        <form action="/knjige/search" method="GET" class="filter-form-grid">
+            <input type="hidden" name="q" value="<%= searchQuery %>">
+
+            <div class="filter-group">
+                <label>Žanr</label>
+                <select name="zanr">
+                    <option value="">Svi žanrovi</option>
+                    <% zanrovi.forEach(z => { %>
+                        <option value="<%= z.zanr_id %>" <%= typeof selectedZanr !== 'undefined' && selectedZanr == z.zanr_id ? 'selected' : '' %>><%= z.naziv %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Jezik</label>
+                <select name="jezik">
+                    <option value="">Svi jezici</option>
+                    <% jezici.forEach(j => { %>
+                        <option value="<%= j.jezik_id %>" <%= typeof selectedJezik !== 'undefined' && selectedJezik == j.jezik_id ? 'selected' : '' %>><%= j.naziv %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Cijena (KM)</label>
+                <div class="price-inputs-row">
+                    <input type="number" name="minCijena" placeholder="Min" value="<%= minCijena %>">
+                    <input type="number" name="maxCijena" placeholder="Max" value="<%= maxCijena %>">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Sortiraj</label>
+                <select name="sort">
+                    <option value="novo" <%= sort == 'novo' ? 'selected' : '' %>>Najnovije</option>
+                    <option value="jeftinije" <%= sort == 'jeftinije' ? 'selected' : '' %>>Cijena: Niža ka višoj</option>
+                    <option value="skuplje" <%= sort == 'skuplje' ? 'selected' : '' %>>Cijena: Viša ka nižoj</option>
+                </select>
+            </div>
+
+            <div class="filter-group action-group">
+                <button type="submit" class="apply-btn">Primijeni</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleFilterMenu() {
+        const menu = document.getElementById('filterMenu');
+        const arrow = document.getElementById('filterArrow');
+        
+        // Provjeravamo trenutno stanje preko computed style jer klase mogu biti varljive pri prvom kliku
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            menu.classList.add('active');
+            arrow.innerHTML = '▲';
+        } else {
+            menu.classList.remove('active');
+            menu.classList.add('hidden');
+            arrow.innerHTML = '▼';
+        }
+    }
+</script>

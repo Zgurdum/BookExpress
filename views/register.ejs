@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registracija</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>  
+</head>
+<body>
+
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="main-content-container">
+        <section class="form-section">
+            <h2 class="znanje">Svaki čovjek po prirodi teži znanju - Aristotel</h2>
+            <h2 class="register-form">Registracija</h2>
+
+            <form action="/auth/register" method="POST" enctype="multipart/form-data" class="auth-form">
+                
+                <label for="profilna_slika">Profilna fotografija</label>
+                <div class="file-input-wrapper">
+                    <input id="profilna_slika" type="file" name="profilna_slika" accept="image/*">
+                    <small>Preporučeno: Kvadratna slika, max 2MB</small>
+                </div>
+
+                <label for="ime">Ime</label>
+                <input id="ime" type="text" name="ime" placeholder="Unesi ime ovdje" required>
+
+                <label for="prezime">Prezime</label>
+                <input id="prezime" type="text" name="prezime" placeholder="Unesi prezime ovdje" required>
+
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" placeholder="Unesi svoje e-mail" required>
+
+                <label for="lozinka">Lozinka</label>
+                <input id="lozinka" type="password" name="lozinka" placeholder="Minimalno 6 karaktera" required>
+
+                <label for="lokacija">Lokacija (Grad)</label>
+                <div class="select-wrapper">
+                    <select id="lokacija" name="lokacija_id" required>
+                        <option value="" disabled selected>Odaberi svoj grad</option>
+                        
+                        <% if (typeof sveLokacije !== 'undefined' && sveLokacije.length > 0) { %>
+                            <% sveLokacije.forEach(lokacija => { %>
+                                <option value="<%= lokacija.lokacija_id %>">
+                                    <%= lokacija.naziv %>
+                                </option>
+                            <% }) %>
+                        <% } else { %>
+                            <option value="" disabled>Nema dostupnih lokacija</option>
+                        <% } %>
+
+                        <option value="drugo">Ostalo / Izvan BiH</option>
+                    </select>
+                </div>
+
+                <label>Interesi (odaberi žanrove koji te zanimaju):</label> 
+                <div class="interests-grid">
+                    <% sviZanrovi.forEach(zanr => { %>
+                        <label class="interest-item">
+                            <input type="checkbox" name="zanrovi" value="<%= zanr.zanr_id %>">
+                            <span><%= zanr.naziv %></span>
+                        </label>
+                    <% }) %>
+                </div>
+
+                <label>Jezici (odaberi jezike na kojima čitaš literaturu):</label> 
+                <div class="interests-grid">
+                    <% sviJezici.forEach(jezik => { %>
+                        <label class="interest-item">
+                            <input type="checkbox" name="jezici" value="<%= jezik.jezik_id %>">
+                            <span><%= jezik.naziv %></span>
+                        </label>
+                    <% }) %>
+                </div>
+
+                <button type="submit" class="registracija-dugme">Registruj se</button>
+            </form>
+        </section>
+    </main>
+
+</body>
+</html>

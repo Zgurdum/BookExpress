@@ -1,0 +1,50 @@
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <title>Recenziju | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/recenzija.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>  
+</head>
+
+<%- include('iskoristivi/header.ejs') %>
+
+<div class="uredi-recenziju-kontejner">
+    <div class="forma-kartica">
+        <div class="forma-zaglavlje">
+            <h2><i class="fas fa-star"></i> Ostavi recenziju</h2>
+            <p>Narudžba #<%= narudzba.id %></p>
+        </div>
+
+        <form action="/recenzija/snimi" method="POST" class="custom-forma">
+            <input type="hidden" name="narudzba_id" value="<%= narudzba.id %>">
+            <input type="hidden" name="prodavac_id" value="<%= prodavacId %>">
+            
+            <div class="input-grupa">
+                <label>Vaša ocjena:</label>
+                <div class="rating-izbor">
+                    <% for(let i=5; i>=1; i--) { %>
+                        <input type="radio" id="star<%= i %>" name="ocjena" value="<%= i %>" required />
+                        <label for="star<%= i %>" title="<%= i %> zvjezdica">
+                            <i class="fas fa-star"></i>
+                        </label>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="input-grupa">
+                <label for="komentar">Vaš komentar:</label>
+                <textarea name="komentar" id="komentar" placeholder="Kako ste zadovoljni knjigom i prodavcem?" required></textarea>
+            </div>
+
+            <div class="akcije-forme">
+                <button type="submit" class="dugme-spasi">
+                    <i class="fas fa-check"></i> Objavi recenziju
+                </button>
+                <a href="/" class="dugme-otkaži">Odustani</a>
+            </div>
+        </form>
+    </div>
+</div>

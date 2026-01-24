@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knjiga Exchange</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/smooth-scroll.css">  
+</head>
+<body>
+
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="main-content-container">
+        
+        <section class="search-section">
+            <form action="/knjige/search" method="GET" class="search-form">
+                <input type="text" name="q" class="search-input" 
+                       placeholder="Pretraži knjigu po naslovu ili autoru..." 
+                       value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" required>
+                <button type="submit" class="search-button">Pretraži</button>
+            </form>
+        </section>
+
+    <% if (typeof searchQuery !== 'undefined' && searchQuery !== '') { %>
+        <section class="results-layout">
+            <aside class="filters-sidebar">
+                <%- include('./iskoristivi/filterPretrage.ejs') %>
+            </aside>
+
+            <section class="book-list-section search-results-section">
+                <h3 class="section-title">🔍 Rezultati za: "<%= searchQuery %>" (<%= books.length %>)</h3>
+                <div class="book-grid">
+                    <% books.forEach(function(book) { %>
+                        <%- include('./iskoristivi/bookcard.ejs', { book: book }) %> 
+                    <% }); %>
+                </div>
+            </section>
+        </section>
+
+    <% } else { %>
+
+        <section class="book-list-section popular-books-section">
+            <div class="section-header-container">
+                <h3 class="section-title"><i class="fas fa-fire" style="color: #ff4500;"></i> Najpopularnije Knjige</h3>
+            </div>
+            
+            <div class="book-grid popular-grid">
+                <% if (popularBooks && popularBooks.length > 0) { %>
+                    <% popularBooks.forEach(function(pBook) { %>
+                        <%# PAŽNJA: Prosljeđujemo pBook pod imenom 'book' jer bookcard.ejs to očekuje %>
+                        <%- include('./iskoristivi/bookcard.ejs', { book: pBook }) %> 
+                    <% }); %>
+                <% } else { %>
+                    <p class="empty-state">Trenutno nema istaknutih popularnih knjiga.</p>
+                <% } %>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+        <% if (recommendedBooks && recommendedBooks.length > 0) { %>
+            <section class="recommended-section">
+                <h2>Preporučeno za vas</h2>
+                <div class="book-grid">
+                    <% recommendedBooks.forEach(book => { %>
+                        <%- include('./iskoristivi/bookCard.ejs', { book: book }) %>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+        <section class="book-list-section random-books-section">
+            <h3 class="section-title">📚 Slučajno Odabrane Knjige</h3>
+            <div class="book-grid">
+                <% if (books && books.length > 0) { %>
+                    <% books.forEach(function(book) { %>
+                        <%- include('./iskoristivi/bookcard.ejs', { book: book }) %> 
+                    <% }); %>
+                <% } else { %>
+                    <p class="empty-state">Nema knjiga za prikaz.</p>
+                <% } %>
+            </div>
+        </section>
+
+
+    <% } %>
+    </main>
+
+</body>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="javascripts/smooth-scroll.js"></script>
+</html>

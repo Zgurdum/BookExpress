@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edituj profil</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+</head>
+<body>
+
+    <%- include('./iskoristivi/header.ejs') %>
+
+<main class="main-content-container">
+        <section class="form-section">
+            <h2 class="register-form">Uredi Profil</h2>
+
+            <form action="/users/profil/edit" method="POST" enctype="multipart/form-data" class="auth-form">
+                
+                <label>Profilna fotografija</label>
+                <div class="edit-avatar-section" style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <div class="current-avatar">
+                        <% if (user.profilna_slika_url) { %>
+                            <img src="<%= user.profilna_slika_url %>" alt="Trenutna slika" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                        <% } else { %>
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; color: #999;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="upload-options">
+                        <input id="profilna_slika" type="file" name="profilna_slika" accept="image/*">
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Ostavite prazno ako ne želite mijenjati sliku.</p>
+                    </div>
+                </div>
+
+                <label for="ime">Ime</label>
+                <input id="ime" type="text" name="ime" value="<%= user.ime %>" required>
+
+                <label for="prezime">Prezime</label>
+                <input id="prezime" type="text" name="prezime" value="<%= user.prezime %>" required>
+
+                <label for="lokacija_id">Lokacija (Grad)</label>
+                <div class="select-wrapper">
+                    <select id="lokacija_id" name="lokacija_id" required>
+                        <option value="" disabled>Odaberi svoj grad</option>
+                        <% sveLokacije.forEach(lok => { %>
+                            <option value="<%= lok.lokacija_id %>" <%= (user.lokacija_id === lok.lokacija_id) ? 'selected' : '' %>>
+                                <%= lok.naziv %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <label>Interesi (tvoji žanrovi):</label> 
+                <div class="interests-grid">
+                    <% sviZanrovi.forEach(z => { %>
+                        <label class="interest-item">
+                            <input type="checkbox" name="zanrovi" value="<%= z.zanr_id %>" 
+                                <%= userZanroviIds.includes(z.zanr_id) ? 'checked' : '' %>>
+                            <span><%= z.naziv %></span>
+                        </label>
+                    <% }); %>
+                </div>
+
+                <label>Jezici:</label> 
+                <div class="interests-grid">
+                    <% sviJezici.forEach(j => { %>
+                        <label class="interest-item">
+                            <input type="checkbox" name="jezici" value="<%= j.jezik_id %>" 
+                                <%= userJeziciIds.includes(j.jezik_id) ? 'checked' : '' %>>
+                            <span><%= j.naziv %></span>
+                        </label>
+                    <% }); %>
+                </div>
+
+                <button type="submit" class="registracija-dugme">Sačuvaj izmjene</button>
+            </form>
+        </section>
+    </main>
+
+</body>
+</html>

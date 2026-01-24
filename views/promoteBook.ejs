@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promoviši Oglas - BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/knjiga.css">
+    <link rel="stylesheet" href="/stylesheets/promotions.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+</head>
+<body>
+
+<%- include('./iskoristivi/header.ejs') %>
+
+<div class="payment-container">
+    <div class="promotion-summary">
+        <h3>Promoviši svoj oglas</h3>
+        <div class="book-info">
+            <img src="<%= book.fotografija_url || '/images/placeholder.jpg' %>"
+                 alt="<%= book.naziv %>"
+                 class="book-image">
+            <div class="book-details">
+                <h4><%= book.naziv %></h4>
+                <p><%= book.autor %></p>
+                <p>Cijena: <%= book.cijena.toFixed(2) %> KM</p>
+            </div>
+        </div>
+        <p>Vaša knjiga će biti istaknuta na vrhu pretrage i dobiti će veću vidljivost na platformi.</p>
+        <div class="price-highlight">
+            <%= promotionPrice.toFixed(2) %> KM
+        </div>
+    </div>
+
+    <form class="payment-form" id="paymentForm" data-promotion-price="<%= promotionPrice %>">
+        <input type="hidden" name="bookId" value="<%= book.id %>">
+        <input type="hidden" name="amount" value="<%= promotionPrice %>">
+
+        <div class="form-group">
+            <label for="cardNumber">Broj kartice</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+        </div>
+
+        <div class="card-inputs">
+            <div class="form-group">
+                <label for="expiryDate">Datum isteka</label>
+                <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cardholderName">Ime vlasnika kartice</label>
+            <input type="text" id="cardholderName" name="cardholderName" placeholder="Kenan Boračić" required>
+        </div>
+
+        <button type="submit" class="pay-button" id="payButton">
+            <span id="buttonText">Plati <%= promotionPrice.toFixed(2) %> KM</span>
+        </button>
+    </form>
+
+    <div class="security-notice">
+        <h4>Sigurno plaćanje</h4>
+        <p>Vaši podaci o kartici su zaštićeni SSL enkripcijom i ne čuvaju se na našem serveru. Koristimo Monri Payments za sigurnu obradu transakcija.</p>
+    </div>
+</div>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+<!-- CUstom alert funkcije, trebao bi ovako u svakom fajlu primjeniti -->
+<script src="/javascripts/alerts.js"></script>
+<!-- promotebook-->
+<script src="/javascripts/promoteBook.js"></script>
+
+</body>
+</html>

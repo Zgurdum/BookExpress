@@ -1,0 +1,160 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('nodeprojekatmvc:server');
+var http = require('http');
+const { Poruka } = require('../Models/Index');
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+// Ovo omogućava kontrolerima da pristupe io objektu ako zatreba
+app.set('io', io);
+
+io.on('connection', (socket) => {
+    console.log('✅ Korisnik povezan na socket:', socket.id);
+
+    socket.on('join_room', (roomId) => {
+        socket.join(roomId);
+        console.log(`User joined room: ${roomId}`);
+    });
+
+    socket.on('send_message', async (data) => {
+        console.log("📩 Primljena poruka za bazu:", data);
+        
+        try {
+            // SPREMANJE U BAZU
+            // Provjeri da li se kolone zovu baš ovako u tvom modelu!
+            const novaPoruka = await Poruka.create({
+                posiljalac_id: data.senderId,
+                primalac_id: data.receiverId,
+                tekst: data.text,
+                dostavljeno: true,
+                procitano: false // Will be marked as read when receiver opens chat
+            });
+            
+            console.log("💾 Poruka uspješno spašena u DB, ID:", novaPoruka.id);
+
+            // SLANJE SVIMA U SOBI
+            io.to(data.roomId).emit('receive_message', {
+                ...data,
+                id: novaPoruka.id,
+                createdAt: novaPoruka.createdAt,
+                dostavljeno: true,
+                procitano: false
+            });
+        } catch (err) {
+            console.error("❌ GREŠKA PRI SPAŠAVANJU:", err);
+        }
+    });
+
+    socket.on('mark_messages_read', async (data) => {
+        try {
+            const { roomId, senderId, receiverId } = data;
+            
+            // Mark messages as read
+            await Poruka.update(
+                { procitano: true },
+                {
+                    where: {
+                        posiljalac_id: senderId,
+                        primalac_id: receiverId,
+                        procitano: false
+                    }
+                }
+            );
+            
+            // Notify sender that messages were read
+            io.to(roomId).emit('messages_read', { senderId, receiverId });
+        } catch (err) {
+            console.error("❌ GREŠKA PRI OZNAČAVANJU PORUKA KAO PROČITANE:", err);
+        }
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+/** Listen on provided port */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

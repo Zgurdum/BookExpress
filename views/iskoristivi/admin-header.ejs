@@ -1,0 +1,21 @@
+<header class="admin-header">
+            <div class="header-container">
+                <div class="logo">
+                    <span class="logo-text">ADMIN</span>
+                </div>
+                <nav class="admin-nav">
+                    <ul>
+                        <li><a href="/admin/dashboard" class="<%= locals.activePage === 'statistika' ? 'active' : '' %>"><i class="icon-chart"></i> Statistika</a></li>
+                        <li><a href="/admin/korisnici" class="<%= locals.activePage === 'korisnici' ? 'active' : '' %>"><i class="icon-users"></i> Korisnici</a></li>
+                        <li><a href="/admin/katalog" class="<%= locals.activePage === 'katalog' ? 'active' : '' %>"><i class="icon-book"></i> Katalog</a></li>
+                        <li><a href="/admin/reports" class="<%= locals.activePage === 'reports' ? 'active' : '' %>"><i class="icon-chat"></i> Report</a></li>
+                    </ul>
+                </nav>
+                <div class="admin-profile">
+                    <span class="admin-name">Administrator</span>
+                    <form action="/auth/logout" method="POST" style="display: inline;">
+                        <button type="submit" class="logout-btn" style="background: none; cursor: pointer;">Odjava</button>
+                    </form>
+                </div>
+            </div>
+</header>

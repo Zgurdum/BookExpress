@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/knjiga.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+    <script src="/javascripts/alerts.js"></script>
+</head>
+<body>
+
+
+
+
+<%- include('./iskoristivi/header.ejs') %>
+
+<main class="publish-book-container">
+    <div class="form-card">
+        <h1>Objavi Novu Knjigu</h1>
+        <p class="subtitle">Popunite detalje o knjizi koju želite prodati ili razmijeniti.</p>
+
+        <form action="/knjige/add" method="POST" enctype="multipart/form-data" class="book-publish-form">
+            
+            <fieldset class="form-section">
+                <legend>Osnovni Detalji</legend>
+
+                <div class="form-group">
+                    <label for="naziv">Naslov Knjige *</label>
+                    <input type="text" id="naziv" name="naziv" required maxlength="255">
+                </div>
+
+                <div class="form-group">
+                    <label for="autor">Autor *</label>
+                    <input type="text" id="autor" name="autor" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="izdavac">Izdavač</label>
+                    <input type="text" id="izdavac" name="izdavac" maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="godina_izdanja">Godina Izdanja</label>
+                    <input type="number" id="godina_izdanja" name="godina_izdanja" min="1500" max="<%= new Date().getFullYear() %>">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Kategorizacija</legend>
+
+                <div class="select-group">
+                    <div class="form-group">
+                        <label for="zanr_id">Žanr *</label>
+                        <select id="zanr_id" name="zanr_id" required>
+                            <option value="" disabled selected>Odaberite žanr</option>
+                            <% if (zanrovi && zanrovi.length) { %>
+                                <% zanrovi.forEach(zanr => { %>
+                                    <option value="<%= zanr.zanr_id %>"><%= zanr.naziv %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jezik_id">Jezik *</label>
+                        <select id="jezik_id" name="jezik_id" required>
+                            <option value="" disabled selected>Odaberite jezik</option>
+                            <% if (jezici && jezici.length) { %>
+                                <% jezici.forEach(jezik => { %>
+                                    <option value="<%= jezik.jezik_id %>"><%= jezik.naziv %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stanje_id">Stanje Knjige *</label>
+                        <select id="stanje_id" name="stanje_id" required>
+                            <option value="" disabled selected>Odaberite stanje</option>
+                            <% if (stanja && stanja.length) { %>
+                                <% stanja.forEach(stanje => { %>
+                                    <option value="<%= stanje.stanje_id %>"><%= stanje.naziv_stanja %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Cijena i Opis</legend>
+
+                <div class="form-group">
+                    <label for="cijena">Cijena (KM) *</label>
+                    <input type="number" id="cijena" name="cijena" required min="0.01" step="0.01">
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="mogucnost_razmjene" name="mogucnost_razmjene">
+                    <label for="mogucnost_razmjene">Mogućnost razmjene/zamjene</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="opis">Detaljan Opis</label>
+                    <textarea id="opis" name="opis" rows="6" placeholder="Opišite stanje knjige, bitne detalje ili razlog prodaje."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="fotografija_url">Fotografija Knjige</label>
+                    <input type="file" id="fotografija_url" name="fotografija" accept="image/*">
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="button primary-button large-button">Objavi Knjigu</button>
+            </div>
+        </form>
+    </div>
+</main>

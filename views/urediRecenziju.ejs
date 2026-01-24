@@ -1,0 +1,49 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Recenzija | BookExpress</title>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/recenzija.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+</head>
+
+<%- include('iskoristivi/header.ejs') %>
+
+<div class="uredi-recenziju-kontejner">
+    <div class="forma-kartica">
+        <div class="forma-zaglavlje">
+            <h2><i class="fas fa-edit"></i> Uredi svoju recenziju</h2>
+            <p>Imate 24 sata od objave da izmijenite svoju ocjenu ili komentar.</p>
+        </div>
+
+        <form action="/recenzija/uredi/<%= recenzija.id %>" method="POST" class="custom-forma">
+            
+            <div class="input-grupa">
+                <label>Vaša ocjena:</label>
+                <div class="rating-izbor">
+                    <% for(let i=5; i>=1; i--) { %>
+                        <input type="radio" id="star<%= i %>" name="ocjena" value="<%= i %>" 
+                               <%= recenzija.ocjena == i ? 'checked' : '' %> />
+                        <label for="star<%= i %>" title="<%= i %> zvjezdica">
+                            <i class="fas fa-star"></i>
+                        </label>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="input-grupa">
+                <label for="komentar">Vaš komentar:</label>
+                <textarea name="komentar" id="komentar" placeholder="Napišite vaše mišljenje..." required><%= recenzija.komentar %></textarea>
+            </div>
+
+            <div class="akcije-forme">
+                <button type="submit" class="dugme-spasi">
+                    <i class="fas fa-check"></i> Spasi izmjene
+                </button>
+                <a href="/recenzija/moji-komentari" class="dugme-otkaži">Odustani</a>
+            </div>
+        </form>
+    </div>
+</div>

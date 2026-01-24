@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <title>Moje Narudžbe | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/narudzbe.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>  
+
+<body>
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="orders-container">
+        <h1>Moje narudžbe</h1>
+
+        <% if (narudzbe && narudzbe.length > 0) { %>
+            <% narudzbe.forEach(n => { %>
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <strong>Narudžba #<%= n.id %></strong>
+                            <span style="color: #888; margin-left: 10px;"><%= new Date(n.datum_narudzbe).toLocaleDateString('bs-BA') %></span>
+                        </div>
+                        <span class="order-status status-<%= n.status %>">
+                            <%= n.status.replace('_', ' ') %>
+                        </span>
+                    </div>
+
+                    <ul class="order-items-list">
+                        <% n.Stavke.forEach(s => { %>
+                            <li class="order-item">
+                                <span>"<%= s.Knjiga.naziv %>" (<%= s.kolicina %>)</span>
+                                <span><%= s.cijena_u_trenutku_kupovine %> KM</span>
+                            </li>
+                        <% }) %>
+                    </ul>
+
+                    <div class="total-price">
+                        Ukupno: <%= n.ukupna_cijena %> KM
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <% if (n.status === 'na_cekanju') { %>
+                            <button class="btn-cancel" onclick="otkaziNarudzbu('<%= n.id %>')" 
+                                    style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                                Otkaži narudžbu
+                            </button>
+                        <% } %>
+                    </div>
+                    <% if (n.status === 'dostavljeno') { %>
+                        <div style="margin-top: 10px; text-align: right;">
+                            <a href="/recenzije/nova/<%= n.id %>" class="btn-small">Ocijeni prodavca</a>
+                        </div>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div style="text-align: center; margin-top: 50px;">
+                <p>Još uvijek niste napravili nijednu narudžbu.</p>
+                <a href="/" class="btn-main">Kreni u kupovinu</a>
+            </div>
+        <% } %>
+    </main>
+</body>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="javascripts/smooth-scroll.js"></script>
+</html>

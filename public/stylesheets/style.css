@@ -1,0 +1,496 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: #e5e7eb;
+    margin: 0 auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    scroll-behavior: smooth;
+    font-weight: 400 !important;
+}
+h4{
+    font-weight: 600;
+    font-size: 18px;
+}
+h3{
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+
+}
+h2{
+    font-weight: 600;
+    font-size: 24px;
+    
+}
+.section-title {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* --- 2. Header and Navigation --- */
+.main-header {
+    background-color: var(--text-dark);
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.main-header h1 {
+    font-size: 1.5rem;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.main-nav a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+
+/* Header user actions (cart/messages/profile) */
+.main-nav .user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.08);
+}
+
+.button {
+    padding: 8px 15px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.primary-button {
+    background-color: black;
+    color: white !important;
+}
+.objavi-knjigu{
+    color: white !important;
+    padding: 15px;
+    background-color: rgb(46, 46, 46);
+}
+
+/* --- 3. Search Section --- */
+.search-section {
+    display: flex;
+    background: #e5e7eb;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+}
+
+.search-form {
+    display: flex;
+    flex-grow: 1;
+    gap: 10px;
+    margin: 10px;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* --- 4. Book Grids --- */
+.book-list-section {
+    margin-bottom: 40px;
+}
+
+.book-grid {
+    display: grid;
+    /* Default for larger screens: 4 columns */
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* --- 5. Book Card --- */
+.book-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-image {
+    width: 100%;
+    height: 200px; /* Fixed height for consistent look */
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+
+.card-body {
+    padding: 10px;
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.582);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.card-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-label {
+    font-size: 0.75rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 2px 0;
+}
+
+.card-value {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin: 0;
+}
+
+.card-author {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+.card-price {
+    font-weight: bold;
+    color: #6366f1;
+    font-size: 1.4rem;
+}
+
+/* Book Card Link */
+.book-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* --- 6. Footer --- */
+.main-footer {
+    background-color: var(--text-dark);
+    color: black;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 50px;
+}
+
+
+/*still za profil*/
+.profile-content-wrapper {
+    display: grid;
+    /* Postavlja dvije kolone: prva 1 dio (manja), druga 2 dijela (veća) */
+    grid-template-columns: 1fr 4fr; 
+    gap: 30px; /* Razmak između kolona */
+    margin-top: 20px;/* Ograničite širinu za bolju čitljivost */
+    margin-right: auto;
+    padding: 0 15px;
+}
+/*still za knjige na profilu*/
+.book-grid-container {
+    display: grid;
+    /* Postavite 3 kolone. Koristite auto-fit za prilagodljivost. */
+    grid-template-columns: repeat(5,1fr); 
+    gap: 20px; 
+    margin-top: 15px;
+}
+
+/* Stil za pojedinačnu karticu knjige */
+.book-card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.book-card img {
+    width: 100%;
+    height: 250px; /* Fiksna visina za sličice */
+    object-fit: cover; /* Osigurava da slika pokriva cijelo područje bez izobličenja */
+    border-bottom: 1px solid #eee;
+}
+.book-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+.book-info {
+    padding: 10px;
+}
+.book-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.book-info p {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.book-price {
+    font-weight: bold;
+    color: #6366f1; /* Zelena boja za cijenu */
+    display: block;
+    margin-bottom: 10px;
+}
+
+.details-link {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.details-header h1{
+    margin: 0 !important;
+}
+
+.book-details-page-container{
+    margin-top: 0px;
+}
+
+
+/* Tab Navigacija */
+.profile-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #777;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn i {
+    margin-right: 8px;
+}
+
+.tab-btn.active {
+    color: #333;
+    border-bottom-color: #333; /* Tamna linija ispod aktivnog taba */
+}
+
+.tab-btn:hover {
+    color: #000;
+}
+
+/* Tab Sadržaj */
+.tab-content {
+    display: none; /* Sakrij po defaultu */
+}
+
+.tab-content.active {
+    display: block; /* Prikaži samo aktivni */
+}
+
+/* Recenzije Stil */
+.review-card-modern {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #333;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.stars {
+    color: #f1c40f;
+}
+
+/* Media Query za mobilne uređaje (jedna kolona) */
+@media (max-width: 768px) {
+    .profile-content-wrapper {
+        grid-template-columns: 1fr; /* Postavite jednu kolonu na malim ekranima */
+        gap: 20px;
+    }
+}
+
+
+
+
+
+/* --- 7. Responsiveness (Crucial for mobile experience) --- */
+@media (max-width: 992px) {
+    /* Tablet view: 3 columns */
+    .book-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .book-grid-container{
+        grid-template-columns: repeat(3,1fr); 
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view: 2 columns */
+    .book-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .book-grid-container{
+        grid-template-columns: repeat(2,1fr); 
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+    .search-button, .search-input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Small mobile view: 1 column */
+    .book-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Featured Books Section */
+.featured-books-section {
+    margin: 10px 0;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.featured-books-section .section-header-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.featured-books-section .section-title {
+    color: rgb(165, 130, 15);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    text-align: left;
+}
+
+.section-subtitle {
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.section-divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    margin: 40px 0;
+}
+
+/* Promoted Book Cards */
+.promoted-book-card {
+    position: relative;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.promoted-badge-small {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.promoted-badge-small i {
+    font-size: 10px;
+}

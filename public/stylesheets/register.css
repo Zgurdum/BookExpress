@@ -1,0 +1,214 @@
+/* Uvoz modernog fonta */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+/* GLOBALNI STILOVI I GRADIENT POZADINA */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    /* Moderna gradient pozadina */
+    background: linear-gradient(135deg, #1e293b 0%, #4338ca 50%, #6d28d9 100%) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* NASLOV NA POZADINI */
+.register-form {
+    text-align: center;
+    font-size: 3.5rem; /* Veliki fin font */
+    font-weight: 800;
+    color: white;
+    letter-spacing: -2px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.form-section p.subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* FORM LAYOUT - GLASSMORPHISM */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 480px;
+    margin: 20px auto 60px auto;
+    align-items: stretch;
+    /* Stakleni efekat */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.auth-form label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+/* INPUT POLJA */
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form textarea,
+.select-wrapper select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.auth-form input:focus, 
+.select-wrapper select:focus {
+    outline: none;
+    border-color: #6366f1;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* REGISTRACIJA DUGME */
+.registracija-dugme {
+    padding: 15px;
+    background: linear-gradient(to right, #1e293b, #334155);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.registracija-dugme:hover {
+    background: linear-gradient(to right, #0f172a, #1e293b);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+/* INTERESI / ŽANROVI GRID */
+.interests-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.interest-item input {
+    display: none;
+}
+
+.interest-item span {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    background: white;
+    color: #64748b;
+}
+
+.interest-item input:checked + span {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+}
+
+.interest-item span:hover {
+    border-color: #6366f1;
+    background: #f1f5f9;
+}
+
+/* LOKACIJA SELECT STIL */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.select-wrapper select {
+    appearance: none;
+    cursor: pointer;
+}
+
+/* FILE UPLOAD */
+.file-input-wrapper {
+    margin-bottom: 10px;
+    padding: 15px;
+    background: #f1f5f9;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.file-input-wrapper small {
+    display: block;
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+
+/* GREŠKE */
+.form-errors {
+    background: #fee2e2;
+    padding: 10px;
+    border-radius: 8px;
+    color: #b91c1c;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    border-left: 4px solid #ef4444;
+}
+
+.znanje{
+    margin: 0 auto;
+    color: white;
+    font-size: 1rem;
+    margin-top: 150px;
+    text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .register-form { font-size: 2.5rem; }
+    .profile-main-layout { flex-direction: column; align-items: center; }
+    .profile-sidebar { width: 100%; }
+    .auth-form { margin: 10px; padding: 25px; }
+}

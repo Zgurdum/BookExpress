@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+        <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Statistika</title>
+    <link rel="stylesheet" href="/stylesheets/admin-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <%- include('../iskoristivi/admin-header') %> 
+    <main class="admin-container">
+        <h1 class="page-title">Administrativni Panel - Statistika</h1>
+
+        <div class="stats-overview">
+            <div class="card">
+                <span class="label">Ukupno korisnika</span>
+                <span class="value"><%= data.stats.korisnici.ukupno %></span>
+            </div>
+            <div class="card">
+                <span class="label">Ukupno knjiga</span>
+                <span class="value"><%= data.stats.knjige.ukupno %></span>
+            </div>
+            <div class="card">
+                <span class="label">Aktivni oglasi</span>
+                <span class="value"><%= data.stats.knjige.aktivniOglasi %></span>
+            </div>
+            <div class="card">
+                <span class="label">Završene narudžbe</span>
+                <span class="value"><%= data.stats.narudzbe.zavrseno %></span>
+            </div>
+             <div class="card">
+                <span class="label">Prosj. knjiga po prodavaču</span>
+                <span class="value"><%= data.stats.knjige.prosjekPoProdavacu %></span>
+            </div>
+        </div>
+
+        <div class="view-toggle">
+            <button id="tableViewBtn" class="toggle-btn active">Tabelarni Prikaz</button>
+            <button id="chartViewBtn" class="toggle-btn">Grafički Prikaz</button>
+        </div>
+
+        <div id="tableView" class="view-section active">
+            <div class="table-section">
+                <h3>Detaljni izvještaj korisnika i knjiga</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Indikator</th>
+                            <th>Vrijednost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Broj registrovanih prodavača</td>
+                            <td><strong><%= data.stats.korisnici.prodavaci %></strong></td>
+                        </tr>
+                        <tr>
+                            <td>Broj registrovanih kupaca</td>
+                            <td><strong><%= data.stats.korisnici.kupci %></strong></td>
+                        </tr>
+                        <tr>
+                            <td>Prosječan broj knjiga po prodavaču</td>
+                            <td><strong><%= data.stats.knjige.prosjekPoProdavacu %></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-section">
+                <h3>Najpopularniji žanrovi</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Žanr</th>
+                            <th>Broj naslova u bazi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.stats.popularniZanrovi.forEach(z => { %>
+                            <tr>
+                                <td><%= (z.Zanr && z.Zanr.naziv) ? z.Zanr.naziv : (z['Zanr.naziv'] || 'Nespecificirano') %></td>
+                                <td><%= z.count %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="chartView" class="view-section">
+            <div class="chart-container">
+                <h3>Statistika korisnika</h3>
+                <canvas id="userChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Statistika knjiga</h3>
+                <canvas id="bookChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Najpopularniji žanrovi</h3>
+                <canvas id="genreChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableViewBtn = document.getElementById('tableViewBtn');
+            const chartViewBtn = document.getElementById('chartViewBtn');
+            const tableView = document.getElementById('tableView');
+            const chartView = document.getElementById('chartView');
+
+            function showView(viewToShow) {
+                if (viewToShow === 'table') {
+                    tableView.classList.add('active');
+                    chartView.classList.remove('active');
+                    tableViewBtn.classList.add('active');
+                    chartViewBtn.classList.remove('active');
+                } else {
+                    tableView.classList.remove('active');
+                    chartView.classList.add('active');
+                    tableViewBtn.classList.remove('active');
+                    chartViewBtn.classList.add('active');
+                    renderCharts(); //AI govori da je ovo optimizacija
+                }
+            }
+
+            tableViewBtn.addEventListener('click', () => showView('table'));
+            chartViewBtn.addEventListener('click', () => showView('chart'));
+
+            
+            showView('table'); // Default view table
+
+            // Chart data from EJS
+            const chartData = {
+                korisnici: {
+                    ukupno: Number("<%= data.stats.korisnici.ukupno || 0 %>"),
+                    prodavaci: Number("<%= data.stats.korisnici.prodavaci || 0 %>"),
+                    kupci: Number("<%= data.stats.korisnici.kupci || 0 %>")
+                },
+                knjige: {
+                    ukupno: Number("<%= data.stats.knjige.ukupno || 0 %>"),
+                    aktivniOglasi: Number("<%= data.stats.knjige.aktivniOglasi || 0 %>"),
+                    prosjekPoProdavacu: Number("<%= data.stats.knjige.prosjekPoProdavacu || 0 %>")
+                },
+                narudzbe: {
+                    zavrseno: Number("<%= data.stats.narudzbe.zavrseto || 0 %>")
+                },
+                popularniZanrovi: <%- JSON.stringify(data.stats.popularniZanrovi || []) %>
+            };
+
+            function renderCharts() {
+                // User Chart
+                new Chart(document.getElementById('userChart'), {
+                    type: 'pie',
+                    data: {
+                        labels: ['Prodavači', 'Kupci'],
+                        datasets: [{
+                            data: [chartData.korisnici.prodavaci, chartData.korisnici.kupci],
+                            backgroundColor: ['#4CAF50', '#2196F3'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Distribucija korisnika'
+                            }
+                        }
+                    }
+                });
+
+                // Book Chart
+                new Chart(document.getElementById('bookChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Ukupno Knjiga', 'Aktivni Oglasi', 'Završene Narudžbe'],
+                        datasets: [{
+                            label: 'Broj',
+                            data: [chartData.knjige.ukupno, chartData.knjige.aktivniOglasi, chartData.narudzbe.zavrseno],
+                            backgroundColor: ['#FFC107', '#00BCD4', '#FF5722'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Statistika knjiga i narudžbi'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Genre Chart
+                const genreLabels = chartData.popularniZanrovi.map(z => {
+                    // Handle different possible property names
+                    if (z.Zanr && z.Zanr.naziv) {
+                        return z.Zanr.naziv;
+                    } else if (z['Zanr.naziv']) {
+                        return z['Zanr.naziv'];
+                    } else {
+                        return 'Nespecificirano';
+                    }
+                });
+                const genreCounts = chartData.popularniZanrovi.map(z => z.count || 0);
+
+                new Chart(document.getElementById('genreChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: genreLabels,
+                        datasets: [{
+                            label: 'Broj naslova',
+                            data: genreCounts,
+                            backgroundColor: '#9C27B0',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Najpopularniji žanrovi'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prijava</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+    <script src="/javascripts/alerts.js"></script>
+</head>
+<body>
+
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="main-content-container">
+        <section class="form-section">
+            <h2 class="znanje">Svaki čovjek po prirodi teži znanju - Aristotel</h2>
+            <h2 class = "register-form">Prijava</h2>
+
+            <form action="/auth/login" method="POST" class="auth-form">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" placeholder="Unesi svoje e-mail" value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
+
+                <label for="lozinka">Lozinka</label>
+                <input id="lozinka" type="password" name="lozinka" required>
+
+                <button type="submit" class="registracija-dugme">Prijavi se</button>
+                <div class="login-signup-link">
+                    Nemaš korisnički račun? <a href="/auth/register">Registruj se ovdje</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+
+</body>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="javascripts/smooth-scroll.js"></script>
+    <!-- SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script>
+        // sweetalert
+        <% if (typeof error !== 'undefined' && error) { %>
+            document.addEventListener('DOMContentLoaded', function() {
+                showErrorAlert('<%= error %>');
+            });
+        <% } %>
+
+        <% if (typeof success !== 'undefined' && success) { %>
+            document.addEventListener('DOMContentLoaded', function() {
+                showSuccessAlert('<%= success %>');
+            });
+        <% } %>
+    </script>
+</html>

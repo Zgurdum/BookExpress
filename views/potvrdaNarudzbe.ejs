@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <title>Narudžba Potvrđena | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>  
+</head>
+<body>
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="container" style="text-align: center; margin-top: 50px;">
+        <div class="success-card">
+            <h1 style="color: #5e39e2;">✔ Narudžba uspješno kreirana!</h1>
+            <p>Hvala vam na kupovini. Vaš broj narudžbe je: <strong>#<%= narudzba.id %></strong></p>
+            
+            <div style="margin: 30px auto; max-width: 500px; text-align: left; background: #f4f4f4; padding: 20px;">
+                <h4>Sažetak dostave:</h4>
+                <p><strong>Adresa:</strong> <%= narudzba.adresa_dostave %></p>
+                <p><strong>Telefon:</strong> <%= narudzba.broj_telefona %></p>
+                <p><strong>Ukupno plaćeno:</strong> <%= narudzba.ukupna_cijena %> KM</p>
+            </div>
+
+            <a href="/" class="btn-main">Vrati se na početnu</a>
+        </div>
+    </main>
+</body>
+</html>

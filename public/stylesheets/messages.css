@@ -1,0 +1,209 @@
+/* public/stylesheets/messages.css */
+:root {
+    --primary-color: #0084ff;
+    --bg-light: #f0f2f5;
+    --text-dark: #1c1e21;
+    --border-color: #ddd;
+}
+
+.messages-container {
+    display: flex;
+    height: calc(100vh - 80px); /* 80px je pretpostavljena visina tvog headera */
+    margin: 0;
+    background: #fff;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Sidebar - Lijeva strana */
+.inbox-sidebar {
+    width: 350px;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.conversations-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.conversation-item {
+    padding-top: 10px;
+    border-top: 2px solid purple;
+    border-bottom: 2px solid purple;
+    border-radius: 20px;
+    display: flex;
+    padding: 15px;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: background 0.2s;
+}
+
+.conversation-item:hover { background: var(--bg-light); }
+.conversation-item.active { background: #e7f3ff; border-left: 4px solid var(--primary-color); }
+
+/* Glavni prozor chata */
+.chat-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.chat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: bold;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f9f9f9;
+}
+.placeholder-content{
+    margin: 0 auto;
+    padding-top: 15px;
+    align-items: center;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+
+.sidebar-header{
+    text-align: center;
+    padding: 10px;
+}
+/* Bubble dizajn */
+.message-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.message-wrapper.sent { justify-content: flex-end; }
+.message-wrapper.received { justify-content: flex-start; }
+
+.message-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+}
+
+.message-time {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 5px;
+    text-align: right;
+}
+
+.received .message-time {
+    color: rgba(0,0,0,0.5);
+}
+
+.message-status {
+    font-size: 12px;
+    margin-top: 2px;
+    text-align: right;
+}
+
+.status.delivered {
+    color: #999;
+}
+
+.status.seen {
+    color: #0084ff;
+}
+
+.sent .message-bubble {
+    background: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.received .message-bubble {
+    background: #e4e6eb;
+    color: var(--text-dark);
+    border-bottom-left-radius: 4px;
+}
+
+/* Input zona */
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input-area button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .inbox-sidebar {
+        display: block; /* Vidi se inbox */
+        width: 100%;
+    }
+    .chat-window {
+        display: none; /* Sakriven chat prozor dok ne klikneš */
+    }
+    .messages-container.chat-active .inbox-sidebar {
+        display: none; /* Sakrij inbox kad uđeš u chat */
+    }
+    .messages-container.chat-active .chat-window {
+        display: flex; /* Pokaži chat prozor */
+        width: 100%;
+    }
+    .back-button{
+        display: block; /*pokazati nazad strelicu */
+    }
+}
+
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.sent .message-bubble {
+    background: #0084ff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.received .message-bubble {
+    background: #f1f0f0;
+    color: #050505;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.back-button{
+    display: none;
+}

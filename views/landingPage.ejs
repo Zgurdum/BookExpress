@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/smooth-scroll.css">
+</head>
+
+<body>
+
+    <%- include('./iskoristivi/header.ejs') %>
+
+        <main class="main-content-container">
+
+            <section class="search-section">
+                <form action="/knjige/search" method="GET" class="search-form">
+                    <input type="text" name="q" class="search-input"
+                        placeholder="Pretraži knjigu po naslovu ili autoru..."
+                        value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" required>
+                    <button type="submit" class="search-button">Pretraži</button>
+                </form>
+            </section>
+
+            <% if (promotedBooks && promotedBooks.length > 0) { %>
+                <section class="featured-books-section">
+                    <div class="section-header-container">
+                        <h3 class="section-title" style="color: rgb(122, 15, 165)">Izdvojeni oglasi</h3>
+                    </div>
+                    <div class="book-grid">
+                        <% promotedBooks.forEach(function(promotion) { %>
+                            <%- include('./iskoristivi/bookCard.ejs', { book: promotion.Knjiga, isPromoted: true }) %>
+                        <% }); %>
+                    </div>
+                </section>
+
+                <hr class="section-divider">
+            <% } %>
+
+            <% if (typeof searchQuery !=='undefined' && searchQuery !=='' ) { %>
+                <section class="results-layout">
+                    <aside class="filters-sidebar">
+                        <%- include('./iskoristivi/filterPretrage.ejs') %>
+                    </aside>
+
+                    <section class="book-list-section search-results-section">
+                        <h3 class="section-title">Rezultati za: "<%= searchQuery %>" (<%= books.length %>)</h3>
+                        <div class="book-grid">
+                            <% books.forEach(function(book) { %>
+                                <%- include('./iskoristivi/bookCard.ejs', { book: book }) %>
+                                    <% }); %>
+                        </div>
+                    </section>
+                </section>
+
+                <% } else { %>
+
+                    <section class="book-list-section popular-books-section">
+                        <div class="section-header-container">
+                            <h3 class="section-title"><i class="fas fa-fire" style="color: #ff4500;"></i> Najpopularnije
+                                Knjige</h3>
+                        </div>
+
+                        <div class="book-grid popular-grid">
+                            <% if (popularBooks && popularBooks.length> 0) { %>
+                                <% popularBooks.forEach(function(pBook) { %>
+                                    <%# Prosljeđujemo pBook pod imenom 'book' jer bookcard.ejs to očekuje %>
+                                        <%- include('./iskoristivi/bookCard.ejs', { book: pBook }) %>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <p class="empty-state">Trenutno nema istaknutih popularnih knjiga.
+                                                    </p>
+                                                    <% } %>
+                        </div>
+                    </section>
+
+                    <hr class="section-divider">
+                    <% if (recommendedBooks && recommendedBooks.length> 0) { %>
+                        <section class="recommended-section">
+                            <h2>Preporučeno za vas</h2>
+                            <div class="book-grid">
+                                <% recommendedBooks.forEach(book=> { %>
+                                    <%- include('./iskoristivi/bookCard.ejs', { book: book }) %>
+                                        <% }) %>
+                            </div>
+                        </section>
+                        <% } %>
+                            <section class="book-list-section random-books-section">
+                                <h3 class="section-title">Slučajno Odabrane Knjige</h3>
+                                <div class="book-grid" id="random-books-grid">
+                                    <% if (books && books.length> 0) { %>
+                                        <% books.forEach(function(book) { %>
+                                            <%- include('./iskoristivi/bookCard.ejs', { book: book }) %>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <p class="empty-state">Nema knjiga za prikaz.</p>
+                                                        <% } %>
+                                </div>
+                                <div class="load-more-container" style="text-align: center; margin-top: 20px;">
+                                    <button id="load-more-btn" class="search-button" style="display: <%= (books && books.length >= 18) ? 'inline-block' : 'none' %>;">Učitaj više knjiga</button>
+                                    <div id="loading-spinner" style="display: none;">Učitavanje...</div>
+                                </div>
+                            </section>
+
+
+                            <% } %>
+        </main>
+
+</body>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="javascripts/smooth-scroll.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const booksGrid = document.getElementById('random-books-grid');
+    
+    let currentOffset = 18; //offset 18 jer smo vec ucitali 18 knjiga
+    
+    loadMoreBtn.addEventListener('click', async function() {
+        loadMoreBtn.style.display = 'none';
+        loadingSpinner.style.display = 'block';
+        
+        try {
+            const response = await fetch(`/knjige/api/more-books?offset=${currentOffset}`);
+            const data = await response.json();
+            
+            if (data.success && data.books.length > 0) {
+                // ako dobije podatke dodaje ih u grid i formatira podatke
+                data.books.forEach(book => {
+                    const rawPrice = Number(book.cijena);
+                    const formattedPrice = (!isNaN(rawPrice) && book.cijena !== null) 
+                        ? rawPrice.toFixed(2) + ' KM' 
+                        : 'N/A';
+                        
+                    const bookCardHtml = `
+                        <a href="/knjige/${book.id}" class="book-card-link">
+                            <div class="book-card">
+                                <img src="${book.fotografija_url || '/images/placeholder.jpg'}" class="book-image" alt="${book.naziv}">
+                                
+                                <div class="card-body">
+                                    <h4 class="card-title">${book.naziv || 'Nepoznat naslov'}</h4>
+                                    <p class="card-author">Autor: ${book.autor || 'N/A'}</p>
+                                    
+                                    <p class="card-price">${formattedPrice}</p>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    booksGrid.insertAdjacentHTML('beforeend', bookCardHtml);
+                });
+                
+                currentOffset += 18;
+                
+                // Ako knjiga nema vise od 18, sakrice dugme
+                if (data.books.length < 18) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-block';
+                }
+            } else {
+                // Ako nije nista dobio ponovo sakriva dugme
+                loadMoreBtn.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading more books:', error);
+            loadMoreBtn.style.display = 'inline-block';
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    });
+});
+</script>
+
+</html>

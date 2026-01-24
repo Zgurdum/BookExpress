@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/knjiga.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+    <script src="/javascripts/alerts.js"></script>
+</head>
+<body>
+
+
+<%- include('../iskoristivi/header.ejs') %>
+
+<main class="book-details-page-container">
+    
+    <% if (!book) { %>
+        <div class="alert alert-danger">
+            <p>Traženi detalji knjige nisu dostupni.</p>
+            <a href="/" class="button primary-button">Nazad na početnu</a>
+        </div>
+    <% } else { %>
+    
+    <div class="details-header">
+        <h1><%= book.naziv %> - <%= book.autor %></h1>
+    </div>
+
+    <div class="details-content-grid">
+        
+        <div class="details-image-and-actions">
+            <img src="<%= book.fotografija_url || '/images/placeholder.jpg' %>" alt="Naslovna slika: <%= book.naziv %>" class="details-book-image">
+
+            <div class="action-buttons">
+                <p class="price-display">
+                    Cijena: <span><%= book.cijena.toFixed(2) %> KM</span>
+                </p>
+                <% if (!isOwner) { %>
+                    <button 
+                        class="button primary-button large-button" 
+                        onclick="dodajUKorpu('<%= book.id %>')">
+                        Dodaj u korpu
+                    </button>
+                    <a href="/messages/<%= book.prodavac_id %>?bookId=<%= book.id %>" class="btn btn-secondary">
+                            Kontaktiraj prodavca
+                    </a>
+                <% } %>
+                <% if (book.mogucnost_razmjene) { %>
+                    <p class="exchange-info"><i class="fas fa-exchange-alt"></i> Moguća zamjena!</p>
+                <% } %>
+            </div>
+            
+            <% if (isOwner) { %>
+                <div class="owner-actions-container">
+                    <a href="/knjige/edit/<%= book.id %>" class="button edit-button">
+                        <i class="fas fa-edit"></i> Uredi Oglas
+                    </a>
+                    <% if (!isPromoted) { %>
+                        <a href="/knjige/promote/<%= book.id %>" class="button promote-button">
+                            <i class="fas fa-rocket"></i> Promoviši Oglas
+                        </a>
+                    <% } else { %>
+                        <div class="promoted-badge">
+                            <i class="fas fa-star"></i> Oglas je promovisan
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="details-info-section">
+            
+            <section class="book-info-card">
+                <h2>Osnovne Informacije</h2>
+                <ul>
+                    <li>Godina Izdanja: <%= book.godina_izdanja || 'N/A' %></li>
+                    <li>Izdavač: <%= book.izdavac || 'N/A' %></li>
+                    <li>Stanje Knjige: <span class="badge status-<%= book.stanje_id %>"><%= book.stanje_knjige || 'N/A' %></span></li>
+                    <li>Jezik: <%= book.jezik || 'N/A' %></li>
+                    <li>Žanr: <%= book.zanr || 'N/A' %></li>
+                    <li>Postavljeno: <%= book.datum_dodavanja_formatirano || 'N/A' %></li>
+                    <li class="views-counter-item">
+                        <span class="view-label">Broj pregleda:</span>
+                        <span class="view-count-badge">
+                            <i class="fas fa-eye"></i> <%= book.pregledi || 0 %>
+                        </span>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="book-description">
+                <h2>Opis Knjige</h2>
+                <p><%= book.opis || 'Prodavac nije unio detaljan opis.' %></p>
+            </section>
+            
+            <% if (book.Prodavac) { %>
+            <section class="seller-info-card">
+                <h2><i class="fas fa-user-circle"></i> Podaci o Prodavcu</h2>
+                <p><strong>Ime i Prezime:</strong> <%= book.Prodavac.ime %> <%= book.Prodavac.prezime %></p>
+                <p><strong>Email:</strong> <a href="mailto:<%= book.Prodavac.email %>"><%= book.Prodavac.email %></a></p>
+                <p><strong>Opis Prodavca:</strong> <%= book.Prodavac.opis_prodavaca || 'Nema opisa.' %></p>
+                <a href="/users/profil/<%= book.Prodavac.id %>" class="button simple-button">Svi oglasi prodavca</a>
+            </section>
+            <% } %>
+
+        </div>
+    </div>
+
+    <% } %>
+</main>
+<script>
+    //ovdje je ajax dobar jer ne moram reloadat stranicu ili promjeniti rutu da bi vidio knjge
+    async function dodajUKorpu(knjigaId) {
+        try {
+            console.log("Pokušaj dodavanja knjige ID:", knjigaId);
+
+            const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify({ knjiga_id: knjigaId }) 
+            });
+
+            const rezultat = await response.json();
+
+            if (response.ok) {
+                // iscrtaj je u korpi
+                const cartItemsContainer = document.getElementById('cart-items');
+                
+                // Ukloni poruku "Korpa je prazna" ako postoji
+                const emptyMsg = cartItemsContainer.querySelector('.empty-msg');
+                if (emptyMsg) emptyMsg.remove();
+
+                // za novu stavku korpe ovaj html ce se dodati
+                const novaStavkaHtml = `
+                    <div class="cart-item" id="cart-item-${knjigaId}">
+                        <div class="cart-item-info">
+                            <p class="cart-item-title">${rezultat.knjiga_naziv || 'Knjiga'}</p>
+                            <p class="cart-item-price">${rezultat.knjiga_cijena || '0.00'} KM</p>
+                        </div>
+                        <button class="remove-item" onclick="ukloniIzKorpe('${knjigaId}')">&times;</button>
+                    </div>
+                `;
+                
+                cartItemsContainer.insertAdjacentHTML('beforeend', novaStavkaHtml);
+
+                // otovri korpu
+                toggleCart(); 
+            }
+        } catch (err) {
+            console.error("AJAX Greška prilikom komunikacije sa serverom:", err);
+            showErrorAlert("Serverska greška. Provjerite konzolu.");
+        }
+    }
+
+    // ZA notifikacije
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('success');
+    const errorMessage = urlParams.get('error');
+
+    if (successMessage) {
+        document.addEventListener('DOMContentLoaded', function() {
+            showSuccessAlert(decodeURIComponent(successMessage));
+        });
+    }
+
+    if (errorMessage) {
+        document.addEventListener('DOMContentLoaded', function() {
+            showErrorAlert(decodeURIComponent(errorMessage));
+        });
+    }
+</script>
+
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upravljanje Katalogom</title>
+    <link rel="stylesheet" href="/stylesheets/admin-style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <%- include('../iskoristivi/admin-header.ejs') %>
+
+    <div class="admin-container">
+        <header class="admin-header-inline">
+            <h1 class="page-title"><i class="fas fa-database"></i> Katalog Sistema</h1>
+        </header>
+
+        <div class="katalog-grid">
+            
+            <section class="katalog-card">
+                <div class="card-header">
+                    <h3>Žanrovi Knjiga</h3>
+                    <button onclick="prikaziFormu('zanr')" class="btn-primary-sm">
+                        <i class="fas fa-plus"></i> Dodaj
+                    </button>
+                </div>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naziv</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% zanrovi.forEach(z => { %>
+                            <tr>
+                                <td><%= z.zanr_id %></td>
+                                <td><%= z.naziv %></td>
+                                <td>
+                                    <button onclick="prikaziEditFormu('zanr', '<%= z.zanr_id %>', '<%= z.naziv %>')" class="action-btn edit-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form action="/admin/katalog/delete/zanr/<%= z.zanr_id %>" method="POST" style="display:inline;" onsubmit="return confirm('Obrisati žanr?')">
+                                        <button class="action-btn delete-icon"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="katalog-card">
+                <div class="card-header">
+                    <h3>Jezici</h3>
+                    <button onclick="prikaziFormu('jezik')" class="btn-primary-sm"><i class="fas fa-plus"></i> Dodaj</button>
+                </div>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naziv</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% jezici.forEach(j => { %>
+                            <tr>
+                                <td><%= j.jezik_id %></td>
+                                <td><%= j.naziv %></td>
+                                <td>
+                                    <button onclick="prikaziEditFormu('jezik', '<%= j.jezik_id %>', '<%= j.naziv %>')" class="action-btn edit-icon"><i class="fas fa-edit"></i></button>
+                                    <form action="/admin/katalog/delete/jezik/<%= j.jezik_id %>" method="POST" style="display:inline;">
+                                        <button class="action-btn delete-icon"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="katalog-card">
+                <div class="card-header">
+                    <h3>Lokacije / Gradovi</h3>
+                    <button onclick="prikaziFormu('lokacija')" class="btn-primary-sm"><i class="fas fa-plus"></i> Dodaj</button>
+                </div>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Grad</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% lokacije.forEach(l => { %>
+                            <tr>
+                                <td><%= l.lokacija_id %></td>
+                                <td><%= l.naziv %></td>
+                                <td>
+                                    <button onclick="prikaziEditFormu('lokacija', '<%= l.lokacija_id %>', '<%= l.naziv %>')" class="action-btn edit-icon"><i class="fas fa-edit"></i></button>
+                                    <form action="/admin/katalog/delete/lokacija/<%= l.lokacija_id %>" method="POST" style="display:inline;">
+                                        <button class="action-btn delete-icon"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="katalog-card">
+                <div class="card-header">
+                    <h3>Stanja Knjige</h3>
+                    <button onclick="prikaziFormu('stanje')" class="btn-primary-sm"><i class="fas fa-plus"></i> Dodaj</button>
+                </div>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Stanje</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% stanja.forEach(s => { %>
+                            <tr>
+                                <td><%= s.stanje_id %></td>
+                                <td><%= s.naziv_stanja %></td>
+                                <td>
+                                    <button onclick="prikaziEditFormu('stanje', '<%= s.stanje_id %>', '<%= s.naziv_stanja %>')" class="action-btn edit-icon"><i class="fas fa-edit"></i></button>
+                                    <form action="/admin/katalog/delete/stanje/<%= s.stanje_id %>" method="POST" style="display:inline;">
+                                        <button class="action-btn delete-icon"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <div id="modalAdd" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Dodaj stavku</h3>
+            <form action="/admin/katalog/add" method="POST">
+                <input type="hidden" name="tip" id="itemTip">
+                <div class="form-group">
+                    <label>Naziv:</label>
+                    <input type="text" name="naziv" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="zatvoriFormu()" class="toggle-btn">Odustani</button>
+                    <button type="submit" class="btn-primary-sm">Sačuvaj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEdit" class="modal">
+        <div class="modal-content">
+            <h3>Uredi stavku</h3>
+            <form action="/admin/katalog/update" method="POST">
+                <input type="hidden" name="tip" id="editTip">
+                <input type="hidden" name="id" id="editId">
+                <div class="form-group">
+                    <label>Novi naziv:</label>
+                    <input type="text" name="noviNaziv" id="editNaziv" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="zatvoriEdit()" class="toggle-btn">Odustani</button>
+                    <button type="submit" class="btn-primary-sm" style="background-color: var(--secondary-color);">Ažuriraj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function prikaziFormu(tip) {
+            document.getElementById('modalAdd').style.display = 'flex';
+            document.getElementById('itemTip').value = tip;
+            document.getElementById('modalTitle').innerText = 'Dodaj novi ' + tip;
+        }
+        function zatvoriFormu() {
+            document.getElementById('modalAdd').style.display = 'none';
+        }
+        function prikaziEditFormu(tip, id, naziv) {
+            document.getElementById('modalEdit').style.display = 'flex';
+            document.getElementById('editTip').value = tip;
+            document.getElementById('editId').value = id;
+            document.getElementById('editNaziv').value = naziv;
+        }
+        function zatvoriEdit() {
+            document.getElementById('modalEdit').style.display = 'none';
+        }
+
+        // Zatvaranje modala na klik van okvira fensi funkcija
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                zatvoriFormu();
+                zatvoriEdit();
+            }
+        }
+    </script>
+</body>
+</html>

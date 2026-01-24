@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/checkout.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>  
+</head>
+<body>
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="checkout-container">
+        <h1 class="page-title">Završi kupovinu</h1>
+
+        <div class="checkout-layout">
+            <section class="delivery-section">
+                <form action="/orders/process" method="POST" class="checkout-form">
+                    <h3>Podaci za dostavu</h3>
+                    
+                    <div class="form-group">
+                        <label for="adresa">Puna adresa (Ulica, broj, grad)</label>
+                        <input type="text" id="adresa" name="adresa" required placeholder="Npr. Maršala Tita 10, Sarajevo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefon">Kontakt telefon</label>
+                        <input type="text" id="telefon" name="telefon" required placeholder="Npr. 061 123 456">
+                    </div>
+                    
+                    <button type="submit" class="btn-confirm">Potvrdi i naruči</button>
+                </form>
+            </section>
+
+            <aside class="order-summary">
+                <h3>Vaša narudžba</h3>
+                <ul class="order-items">
+                    <% stavke.forEach(s => { %>
+                        <li class="order-item">
+                            <span class="item-name"><%= s.Knjiga.naziv %></span>
+                            <span class="item-price"><%= s.Knjiga.cijena %> KM</span>
+                        </li>
+                    <% }) %>
+                </ul>
+                
+                <div class="total-section">
+                    <span class="total-label">UKUPNO:</span>
+                    <strong class="total-amount"><%= ukupno.toFixed(2) %> KM</strong>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>

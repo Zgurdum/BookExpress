@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poruke | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/messages.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/chat.js" defer></script> 
+</head>
+<body>
+    <%- include('./iskoristivi/header.ejs') %>
+
+    <main class="messages-container <%= selectedConversation ? 'chat-active' : '' %>">
+        
+        <aside class="inbox-sidebar">
+            <div class="sidebar-header">
+                <h2>Inbox</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="Pretraži poruke...">
+                </div>
+            </div>
+            
+            <div class="conversations-list">
+                <% if (conversations && conversations.length > 0) { %>
+                    <% conversations.forEach(conv => { %>
+                        <a href="/messages/<%= conv.id %>" class="conversation-item <%= selectedConversation == conv.id ? 'active' : '' %>">
+                            <div class="conv-details">
+                                <strong><%= conv.ime %> <%= conv.prezime %></strong>
+                                <p><%= conv.zadnja_poruka || 'Kliknite za razgovor...' %></p>
+                            </div>
+                        </a>
+                    <% }); %>
+                <% } else { %>
+                    <p class="empty-inbox">Nema aktivnih prepiski.</p>
+                <% } %>
+            </div>
+        </aside>
+
+        <section class="chat-window">
+            <% if (!selectedConversation) { %>
+                <div class="no-chat-selected">
+                    <div class="placeholder-content">
+                        <img src="/images/comment.png" alt="Select chat" style="width: 80px; margin-bottom: 20px;">
+                        <h2>Vaše poruke</h2>
+                        <p>Odaberite razgovor iz liste sa lijeve strane da biste započeli dopisivanje.</p>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="chat-header">
+                    <div class="header-left">
+                        <a href="/messages" class="back-button">← Nazad</a>
+                        <div class="user-info">
+                            <a href="/users/profil/<%= sagovornik.id %>" class="chat-user-link">
+                                <strong><%= sagovornik.ime %> <%= sagovornik.prezime %></strong>
+                            </a>
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        </div>
+                </div>
+
+                <div id="chat-messages" class="chat-messages">
+                    <% if (messages && messages.length > 0) { %>
+                        <% messages.forEach(msg => { %>
+                            <div class="message-wrapper <%= msg.posiljalac_id == user.id ? 'sent' : 'received' %>">
+                                <div class="message-bubble">
+                                    <%= msg.tekst %>
+                                    <div class="message-time"><%= new Date(msg.createdAt).toLocaleTimeString('hr-HR', { hour: '2-digit', minute: '2-digit' }) %></div>
+                                </div>
+                                <% if (msg.posiljalac_id == user.id) { %>
+                                    <div class="message-status">
+                                        <% if (msg.procitano) { %>
+                                            <span class="status seen">✓✓</span>
+                                        <% } else if (msg.dostavljeno) { %>
+                                            <span class="status delivered">✓</span>
+                                        <% } %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p class="no-messages-yet">Nema prethodnih poruka. Pošaljite prvu poruku!</p>
+                    <% } %>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="hidden" id="roomId" value="<%= roomId %>">
+                    <input type="hidden" id="receiverId" value="<%= receiverId %>">
+                    <input type="hidden" id="myId" value="<%= user.id %>">
+                    
+                    <input type="text" id="message-input" placeholder="Napišite poruku..." autocomplete="off">
+                    <button id="send-btn">
+                        <img src="/images/send-icon.png" alt="Send" style="width: 20px;">
+                    </button>
+                </div>
+            <% } %>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>
+</body>
+</html>

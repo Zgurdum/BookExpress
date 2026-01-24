@@ -1,0 +1,35 @@
+<%
+    // Osiguravamo da je book objekt prisutan
+    if (!book) {
+        return; 
+    }
+
+    // Default value for isPromoted if not provided
+    const bookIsPromoted = typeof isPromoted !== 'undefined' ? isPromoted : false;
+
+    // CIJENA FIX: Prvo pretvaramo u Number, pa onda toFixed
+    // Čak i ako je string "15.50", Number() će ga pretvoriti u 15.50
+    const rawPrice = Number(book.cijena);
+    
+    const formattedPrice = (!isNaN(rawPrice) && book.cijena !== null) 
+        ? rawPrice.toFixed(2) + ' KM' 
+        : 'N/A';
+%>
+
+<a href="/knjige/<%= book.id %>" class="book-card-link">
+    <div class="book-card <%= bookIsPromoted ? 'promoted-book-card' : '' %>">
+        <% if (bookIsPromoted) { %>
+            <div class="promoted-badge-small">
+                <i class="fas fa-star"></i> Promovisano
+            </div>
+        <% } %>
+        <img src="<%= book.fotografija_url || '/images/placeholder.jpg' %>" class="book-image" alt="<%= book.naziv %>">
+        
+        <div class="card-body">
+            <h4 class="card-title"><%= book.naziv || 'Nepoznat naslov' %></h4>
+            <p class="card-author">Autor: <%= book.autor || 'N/A' %></p>
+            
+            <p class="card-price"><%= formattedPrice %></p>
+        </div>
+    </div>
+</a>

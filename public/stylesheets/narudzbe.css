@@ -1,0 +1,66 @@
+.orders-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Individual order card styling */
+.order-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Header within the order card */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* Status badge base styles */
+.order-status {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Status-specific colors */
+.status-na_cekanju {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-dostavljeno {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* List of items in the order */
+.order-items-list {
+    list-style: none;
+    padding: 0;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    color: #555;
+}
+
+/* Final price styling */
+.total-price {
+    text-align: right;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #6366f1;
+}

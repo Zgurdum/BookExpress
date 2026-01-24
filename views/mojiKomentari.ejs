@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/book.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komentari | BookExpress</title>
+    <link rel="stylesheet" href="/stylesheets/style.css"> 
+    <link rel="stylesheet" href="/stylesheets/recenzija.css">
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="/javascripts/smooth-scroll.js"></script>   
+</head>
+<body>
+
+<%- include('iskoristivi/header.ejs') %>
+
+<div class="komentari-kontejner">
+    <h2 class="naslov-stranice"><i class="fas fa-comments"></i> Moji komentari i ocjene</h2>
+    <div class="linija"></div>
+
+    <% if (komentari && komentari.length > 0) { %>
+        <div class="lista-komentara">
+            <% komentari.forEach(r => { %>
+                <div class="komentar-kartica">
+                    <div class="komentar-zaglavlje">
+                        <span class="ime-korisnika">
+                            Recenzija za: <%= r.OcijenjeniProdavac ? r.OcijenjeniProdavac.ime + ' ' + r.OcijenjeniProdavac.prezime : 'Nepoznat prodavac' %>
+                        </span>
+                        <span class="datum-tekst"><%= r.datum_za_prikaz %></span>
+                    </div>
+                    
+                    <div class="ocjena-zvjezdice">
+                        <% for(let i=1; i<=5; i++) { %>
+                            <i class="fa<%= i <= r.ocjena ? 's' : 'r' %> fa-star"></i>
+                        <% } %>
+                    </div>
+
+                    <p class="tekst-komentara">"<%= r.komentar %>"</p>
+
+                    <% if (r.mozeUrediti) { %>
+                        <div class="uredi-sekcija">
+                            <a href="/recenzija/uredi/<%= r.id %>" class="dugme-uredi">
+                                <i class="fas fa-edit"></i> Uredi komentar
+                            </a>
+                            <span class="tajmer-tekst">
+                                (Preostalo: <%= r.preostaloSati %>h)
+                            </span>
+                        </div>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p class="nema-podataka">Još uvijek niste ostavili nijedan komentar.</p>
+    <% } %>
+
+    <div class="donja-navigacija">
+        <a href="/" class="link-povratak">Povratak na naslovnu stranicu</a>
+    </div>
+</div>
